@@ -12,7 +12,7 @@
 <div class="fixed top-[20px] left-1/2 transform -translate-x-1/2 z-50">
     {% for message in messages %}
         <div class="alert w-[400px] p-4 mb-4 text-sm rounded-lg {{ message.tags }}"
-            >
+        >
             {{ message | safe }}
         </div>
     {% endfor %}
@@ -20,6 +20,8 @@
 <footer class="w-full text-center p-4 bg-black text-white">
     <p>Use Django and tailwind to do</p>
 </footer>
+{% block script %}
+{% endblock %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var alerts = document.querySelectorAll('.alert');

@@ -3,20 +3,60 @@
 {% block body %}
     <div class="w-full min-h-screen bg-black flex flex-col">
         <div class="flex-1 flex items-center justify-center">
-            <div class="flex flex-col items-center justify-center border rounded-xl w-[400px] p-6 bg-gray-800 backdrop-blur-2xl">
-                <div class=" mb-[10px] text-center">
-                    <h2>Profile</h2>
+            <div class="flex flex-col  items-center justify-center border rounded-xl w-[400px] p-6 bg-gray-800 backdrop-blur-2xl">
+                <div class="grid mb-[10px] grid-cols-3 content-between gap-4">
+                    <h2 class="font-normal place-content-start">Profile </h2>
+                    <div id="UpdateInput" class="col-start-3 col-end-4 text-end place-content-end">
+                        <button onclick="Change()"
+                                class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+<span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+Update
+</span>
+                        </button>
+                    </div>
                 </div>
+                <form method="POST" class="w-full">
+                    {% csrf_token %}
+                    <div class="mb-[10px] w-full">
+                        <p class="text-gray-300 block" id="username"><strong>Username:</strong> {{ user.username }}</p>
+                        <div class="hidden relative " id="divUsernameInput">
+                            <input id="usernameInput" type="text" name="username"
+                                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                   placeholder=" "/>
+                            <label class="absolute hover:bg-transparent bg-transparent text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                                   for="usernameInput">{{ user.username }}</label>
+                        </div>
+                    </div>
 
-                <div class="mb-[10px] w-full">
-                    <p class="text-gray-300"><strong>Username:</strong> {{ user.username }}</p>
+                    <div class="mb-[10px] w-full">
+                        <p class="text-gray-300 block" id="email"><strong>Email:</strong> {{ user.email }}</p>
+                        <div id="divEmailInput" class="hidden relative">
+                            <input id="emailInput" type="email" name="email"
+                                   class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                   placeholder=" "/>
+                            <label class="absolute hover:bg-transparent bg-transparent text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                                   for="emailInput">{{ user.email }}</label>
+                        </div>
+                    </div>
+
+                    <div id="updateProfile" class="hidden relative mb-[10px] w-full">
+                        <button type="submit"
+                                class="w-full relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+<span class="w-full relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+Update Profile
+</span>
+                        </button>
+                    </div>
+                </form>
+                <div id="cancelUpdate" class="hidden relative mb-[10px] w-full">
+                    <button onclick="Cancel()"
+                            class="w-full relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+<span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent w-full">
+Cancel
+</span>
+                    </button>
                 </div>
-
-                <div class="mb-[10px] w-full">
-                    <p class="text-gray-300"><strong>Email:</strong> {{ user.email }}</p>
-                </div>
-
-                <div class="relative mb-[10px] w-full">
+                <div id="logout" class="relative mb-[10px] w-full">
                     <a href="{% url 'user:logout' %}"
                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 w-full">
                         <span class="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-transparent dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
@@ -24,7 +64,65 @@
                         </span>
                     </a>
                 </div>
+                <div id="delete" class="relative mb-[10px] w-full">
+                    <a href="{% url 'user:delete' %}"
+                       class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 w-full">
+                        <span class="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-transparent dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+                            Delete Account
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function Change() {
+            const username1 = document.getElementById('username');
+            const usernameInput = document.getElementById('divUsernameInput');
+            const email1 = document.getElementById('email');
+            const emailInput = document.getElementById('divEmailInput');
+            const UpdateProfile = document.getElementById('updateProfile');
+            const updateInput = document.getElementById('UpdateInput');
+            const logout = document.getElementById('logout');
+            const cancelUpdate = document.getElementById('cancelUpdate');
+            const delete_use = document.getElementById('delete');
+            if (usernameInput.classList.contains('hidden')) {
+                username1.classList.add('hidden');
+                usernameInput.classList.remove('hidden');
+                email1.classList.add('hidden');
+                emailInput.classList.remove('hidden');
+                UpdateProfile.classList.remove('hidden');
+                updateInput.classList.add('hidden');
+                logout.classList.add('hidden');
+                delete_use.classList.add('hidden');
+                cancelUpdate.classList.remove('hidden');
+            }
+        }
+
+        function Cancel() {
+            const username1 = document.getElementById('username');
+            const usernameInput = document.getElementById('divUsernameInput');
+            const email1 = document.getElementById('email');
+            const emailInput = document.getElementById('divEmailInput');
+            const UpdateProfile = document.getElementById('updateProfile');
+            const updateInput = document.getElementById('UpdateInput');
+            const logout = document.getElementById('logout');
+            const cancelUpdate = document.getElementById('cancelUpdate');
+            const delete_use = document.getElementById('delete');
+            if (!usernameInput.classList.contains('hidden')) {
+                username1.classList.remove('hidden');
+                usernameInput.classList.add('hidden');
+                email1.classList.remove('hidden');
+                emailInput.classList.add('hidden');
+                UpdateProfile.classList.add('hidden');
+                updateInput.classList.remove('hidden');
+                logout.classList.remove('hidden');
+                delete_use.classList.remove('hidden');
+                cancelUpdate.classList.add('hidden');
+            }
+        }
+
+    </script>
 {% endblock %}

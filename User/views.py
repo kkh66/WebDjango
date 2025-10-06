@@ -1,5 +1,6 @@
 from django.contrib import messages, auth
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -99,11 +100,11 @@ def login(request):
                 return redirect('user:profile')
             else:
                 messages.error(request, 'Invalid username or password.')
-                return render(request, 'Login.html',context)
+                return render(request, 'Login.html', context)
 
         except User.DoesNotExist:
             messages.error(request, 'Invalid username or password.')
-            render(request, 'Login.html',context)
+            render(request, 'Login.html', context)
 
     return render(request, 'Login.html')
 
@@ -114,7 +115,35 @@ def logout_user(request):
     return redirect('user:login')
 
 
+@login_required
 def profile(request):
     if not request.user.is_authenticated:
         return redirect('user:login')
+    if request.method == 'POST':
+        username1 = request.POST['username']
+        email1 = request.POST['email']
+
+        try:
+            user = User.objects.get(username=request.user.username)
+            user.username = username1
+            user.email = email1
+            user.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('user:profile')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+            return redirect('user:profile')
     return render(request, 'Profile.html')
+
+
+def delete_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('user:login')
+    try:
+        user = User.objects.get(username=request.user.username)
+        user.delete()
+        messages.success(request, 'Profile deleted successfully.')
+        return redirect('user:login')
+    except Exception as e:
+        messages.error(request, f'An error occurred: {str(e)}')
+        return redirect('user:profile')
